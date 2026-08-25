@@ -522,18 +522,23 @@ jobs:
       - name: Clean up build files and reclaim disk space
         id: clean
         if: ${{ steps.compile.outputs.status == 'success' && !cancelled() }}
+        continue-on-error: true
         run: |
-          # Clean up build artifacts and reclaim disk space
+          set +e
+          sync
+          sleep 6
           cd openwrt/
           [[ -d "output" ]] || mkdir output
           ls -alh bin/targets/*/*/* || true
           cp -f bin/targets/*/*/*-generic-rootfs.tar.gz output/
           cp -f .config output/config
-          ls -A | grep -vE '^(output|\.ccache)$' | xargs rm -rf || true
-
-          # Export build metadata
+          # 规避 xargs 返回码坑，逐个删除，不因为个别目录busy导致整体失败
+          for item in $(ls -A | grep -vE '^(output|\.ccache)$'); do
+            rm -rf "$item" 2>/dev/null
+          done
           df -hT ${PWD}
           echo "status=success" >> ${GITHUB_OUTPUT}
+
 
       - name: Upload OpenWrt rootfs to Release
         uses: ophub/upload-to-releases@main
