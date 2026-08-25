@@ -426,7 +426,7 @@ jobs:
           if [[ "${{ matrix.branch }}" =~ ^openwrt ]]; then
               REPO_URL="https://github.com/openwrt/openwrt"
           elif [[ "${{ matrix.branch }}" =~ ^lede ]]; then
-              REPO_URL="https://github.com/coolsnowwolf/lede"
+              REPO_URL="https://github.com/17688838786/lede"
           elif [[ "${{ matrix.branch }}" =~ ^immortalwrt ]]; then
               REPO_URL="https://github.com/immortalwrt/immortalwrt"
           else
