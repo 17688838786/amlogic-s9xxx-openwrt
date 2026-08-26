@@ -56,6 +56,7 @@ git clone -b main https://github.com/ophub/luci-app-amlogic.git package/luci-app
 # git apply ../config/patches/{0001*,0002*}.patch --directory=feeds/luci
 #
 # ------------------------------- Other ends -------------------------------
+
 #=============================================
 # Fine3399 GPIO138 usb‑pwr (GPIO3_A6) power control
 #=============================================
@@ -65,21 +66,21 @@ cat > "${TOPDIR}/files/usr/bin/usbpower-ctrl" <<'EOF'
 GPIO_NUM=138
 case "$1" in
     on|1)
-        echo $GPIO_NUM > /sys/class/gpio/export 2>/dev/null
-        echo out > /sys/class/gpio/gpio${GPIO_NUM}/direction
-        echo 1 > /sys/class/gpio/gpio${GPIO_NUM}/value
+        echo 138 > /sys/class/gpio/export 2>/dev/null
+        echo out > /sys/class/gpio/gpio138/direction
+        echo 1 > /sys/class/gpio/gpio138/value
         ;;
     off|0)
-        echo $GPIO_NUM > /sys/class/gpio/export 2>/dev/null
-        echo out > /sys/class/gpio/gpio${GPIO_NUM}/direction
-        echo 0 > /sys/class/gpio/gpio${GPIO_NUM}/value
+        echo 138 > /sys/class/gpio/export 2>/dev/null
+        echo out > /sys/class/gpio/gpio138/direction
+        echo 0 > /sys/class/gpio/gpio138/value
         ;;
     status)
-        echo $GPIO_NUM > /sys/class/gpio/export 2>/dev/null
-        cat /sys/class/gpio/gpio${GPIO_NUM}/value
+        echo 138 > /sys/class/gpio/export 2>/dev/null
+        cat /sys/class/gpio/gpio138/value
         ;;
     unexport)
-        echo $GPIO_NUM > /sys/class/gpio/unexport 2>/dev/null
+        echo 138 > /sys/class/gpio/unexport 2>/dev/null
         ;;
     *)
         echo "usbpower-ctrl on|off|status|unexport"
@@ -108,5 +109,7 @@ stop_service() {
 EOF
 chmod +x "${TOPDIR}/files/etc/init.d/usbpower"
 
+# 必须: 创建开机自启软链接
 mkdir -p "${TOPDIR}/files/etc/rc.d"
+
 ln -sf ../init.d/usbpower "${TOPDIR}/files/etc/rc.d/S95usbpower"
