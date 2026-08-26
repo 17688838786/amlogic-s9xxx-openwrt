@@ -56,6 +56,7 @@ git clone -b main https://github.com/ophub/luci-app-amlogic.git package/luci-app
 # git apply ../config/patches/{0001*,0002*}.patch --directory=feeds/luci
 #
 # ------------------------------- Other ends -------------------------------
+# Fine3399 GPIO138 usb‑pwr PCI‑WIFI模块上电控制
 mkdir -p "${TOPDIR}/files/usr/bin"
 cat > "${TOPDIR}/files/usr/bin/usbpower-ctrl" <<'EOF'
 #!/bin/sh
@@ -93,9 +94,11 @@ STOP=10
 USE_PROCD=1
 
 start_service() {
-    usbpower-ctrl off
-    sleep 3
-    usbpower-ctrl on
+    (
+        usbpower-ctrl off
+        sleep 3
+        usbpower-ctrl on
+    ) &
 }
 
 stop_service() {
